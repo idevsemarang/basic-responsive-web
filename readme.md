@@ -33,4 +33,4 @@ Make sure you have the following installed on your machine:
 1. Clone the repository to your local machine:
 
    ```bash
-    git clone git@github.com:idevsemarang/basic-resposive-web.git
+    git clone git@github.com:idevsemarang/basic-responsive-web.git
