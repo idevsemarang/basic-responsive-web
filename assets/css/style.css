@@ -68,7 +68,7 @@ body{
 }
 
 
-#idev-bottom-navigation{
+#idev-navigation{
     background-color: #eaddb6;
     /* padding: 10px; */
     border-top-right-radius: 10px;
@@ -79,18 +79,18 @@ body{
 }
 
 
-#idev-bottom-navigation .menu-bottom{
+#idev-navigation .menu-bottom{
     text-align: center;
     padding: 6px;
 }
 
-#idev-bottom-navigation .menu-bottom.active{
+#idev-navigation .menu-bottom.active{
     background: #b39b54;
     color: #ffffff;
     border-radius: 10px;
 }
 
-#idev-bottom-navigation .text-mbottom{
+#idev-navigation .text-mbottom{
     font-size: 12px;
 }
 
@@ -104,7 +104,7 @@ body{
         margin-left: 120px;
     }
     
-    #idev-bottom-navigation {
+    #idev-navigation {
         padding: 10px;
         position: fixed;
         width: 10%;
