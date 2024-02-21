@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Auction Apps</title>
+  </head>
+  <link href="http://localhost/workshop/basic-resposive-web/assets/css/bootstrap.css" rel="stylesheet" />
+
+  <style>
+    body{
+        padding: 8px;
+    }
+    .grid-results{
+        border: 1px solid #d4aeae;
+    }
+    .grid-results > span{
+        font-size: 20px;
+    }
+    .chart-bar{
+        height: 80%;
+        margin-top: 8px;
+        background-color: #d84242;
+    }
+  </style>
+  <body>
+
+    <div class="row">
+        <div class="col-12 col-sm-12 col-lg-6">
+            <div class="text-center mb-4">
+                <h5>Cemani Auction</h5> 
+                <img style="width: 50%;" src="https://images.bisnis.com/posts/2020/11/14/1317724/images.jpeg" class="img-thumbnail" alt="">
+            </div>        
+        </div>
+        <div class="col-12 col-sm-12 col-lg-6">
+            <div class="text-center">
+                <h5>Live Results</h5> 
+            </div>
+            <div id="section-score">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-lg-6">
+            <br>
+            <label for="">Auction As <span class="txt-user"></span></label>
+            <select name="" id="input-user" class="form-control"></select>
+
+            <label for="">Price</label>
+            <input type="number" name="" class="form-control" id="input-price">
+
+            <button type="button" onclick="updatePrice()" class="btn btn-primary mt-3">Send</button>
+        </div>
+        
+    </div>
+    
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <script src="http://localhost/workshop/basic-resposive-web/assets/js/jquery-3.7.1.min.js"></script>
+
+    <script>
+        const rupiah = (number)=>{
+            return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR"
+            }).format(number);
+        }
+
+        var arrPols = [
+            {
+                id : 1,
+                name : "Sarjono",
+                price : 0,
+            },
+            {
+                id : 2,
+                name : "John Doe",
+                price : 0,
+            },
+            {
+                id : 3,
+                name : "Marwigno",
+                price : 0,
+            }
+        ]
+
+        const socket = io();
+
+        gridScore(arrPols)
+        listUser()
+
+        function listUser() {
+            var mHtml = ""
+            $.each( arrPols, function( key, ap ) {
+                mHtml += '<option value="'+ap.id+'">'+ap.name+'</option>'
+            });
+
+            $("#input-user").html(mHtml)
+        }
+
+        function gridScore(arrPols) {
+            arrPols.sort(function(a, b) {
+                return b.price - a.price;
+            });
+            var mHtml = ""
+            $.each( arrPols, function( key, ap ) {
+                mHtml += '<tr>'
+                mHtml += '<td>'+(key+1)+'</td>'
+                mHtml += '<td>'+ap.name+'</td>'
+                mHtml += '<td>'+rupiah(ap.price)+'</td>'
+                mHtml += '</tr>'
+            });
+
+            $("#section-score > table > tbody").html(mHtml)
+        }
+
+        function updatePrice() {
+            var idUser = $("#input-user").val()
+            var inputPrice = $("#input-price").val()
+            var updateArrPrice = {"id" : idUser, "price": inputPrice}
+
+            socket.emit('post auction', updateArrPrice);
+        }
+
+        socket.on('post auction', (response) => {
+            for (var i = 0; i < arrPols.length; i++) {
+                if (arrPols[i].id == response.id) {
+                    arrPols[i].price = response.price;
+                    break; // Break the loop once the element is found and updated
+                }
+            }
+            gridScore(arrPols)
+        });
+    </script>
+  </body>
+</html>

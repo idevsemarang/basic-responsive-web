@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Election Apps</title>
+  </head>
+  <link href="http://localhost/workshop/basic-resposive-web/assets/css/bootstrap.css" rel="stylesheet" />
+
+  <style>
+    body{
+        padding: 8px;
+    }
+    .grid-results{
+        border: 1px solid #d4aeae;
+    }
+    .grid-results > span, .btn-choose-me{
+        font-size: 12px;
+    }
+    .chart-bar{
+        height: 80%;
+        margin-top: 8px;
+        background-color: #d84242;
+    }
+  </style>
+  <body>
+
+    <div class="row">
+        <div class="col-12 col-sm-12 col-lg-6">
+            <div class="text-center">
+                <h5>Margana Baka presidential election</h5> 
+            </div>
+            <div id="section-president" class="row"></div>
+        
+        </div>
+        <div class="col-12 col-sm-12 col-lg-6">
+            <div class="text-center">
+                <h5>Live Results</h5> 
+            </div>
+            <div id="section-score" class="row"></div>
+        </div>
+        
+    </div>
+    
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <script src="http://localhost/workshop/basic-resposive-web/assets/js/jquery-3.7.1.min.js"></script>
+
+    <script>
+        var arrPols = [
+            {
+                name : "1. Musanguto",
+                image : "https://s.cafebazaar.ir/images/icons/com.special.thewolfgame-c3b0610d-6f1a-4831-aa66-e8bef6bcddda_512x512.png",
+                score : 0,
+            },
+            {
+                name : "2. Andewedus",
+                image : "https://is1-ssl.mzstatic.com/image/thumb/Purple2/v4/c9/ed/f9/c9edf9f5-3f39-307d-c6f2-9b4ba7b86cfe/source/256x256bb.jpg",
+                score : 0,
+            },
+            {
+                name : "3. Dekoalz",
+                image : "https://icons.iconarchive.com/icons/iconarchive/childrens-book-animals/256/Koala-icon.png",
+                score : 0,
+            }
+        ]
+
+        const socket = io();
+
+        gridPresident()
+        gridScore()
+
+        function gridPresident() {
+            var mHtml = ""
+            $.each( arrPols, function( key, ap ) {
+                mHtml += '<div class="col-4">'
+                mHtml += '<img class="img-thumbnail w-100" src="'+ap.image+'">'
+                mHtml += '<button class="btn btn-danger w-100 my-2 btn-choose-me" type="button" onclick="choosePresident('+key+')">'+ap.name+'</button>'
+                mHtml += '</div>'
+            });
+
+            $("#section-president").html(mHtml)
+        }
+
+
+        function gridScore() {
+            var mHtml = ""
+            $.each( arrPols, function( key, ap ) {
+                var intBar = 10*ap.score;
+
+                mHtml += '<div class="col-4 grid-results president-'+key+' text-center">'
+                mHtml += '<h1>'+ap.score+'</h1>'
+                mHtml += '<span>'+ap.name+'</span>'
+                mHtml += '</div>'
+                mHtml += '<div class="col-8 grid-results">'
+                mHtml += '<div class="chart-bar" style="width:'+intBar+'px"></div>'
+                mHtml += '</div>'
+            });
+
+            $("#section-score").html(mHtml)
+        }
+
+        function updateScore(index) {
+            var latestScore = arrPols[index].score
+            arrPols[index].score = latestScore+1
+            gridScore()
+        }
+
+        function choosePresident(index) {
+            $("#section-president").html("<div class='alert alert-success text-center'>Thanks for your polling</div>")
+
+            socket.emit('choose president', index);
+        }
+
+        socket.on('choose president', (msg) => {
+            updateScore(msg)
+        });
+    </script>
+  </body>
+</html>
