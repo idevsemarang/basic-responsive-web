@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat</title>
+</head>
+<body>
+    <div id="chatbox">
+        <ul id="messages"></ul>
+        <input type="text" id="messageInput" placeholder="Type your message...">
+        <button id="sendButton">Send</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Create a new Broadcast Channel with the name 'chatChannel'
+            const chatChannel = new BroadcastChannel('chatChannel');
+            
+            // Get references to HTML elements
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const messagesList = document.getElementById('messages');
+
+            // Function to display a new message in the chatbox
+            function displayMessage(message) {
+                const li = document.createElement('li');
+                li.textContent = message;
+                messagesList.appendChild(li);
+            }
+
+            // Event listener for the send button
+            sendButton.addEventListener('click', function () {
+                const message = messageInput.value.trim();
+                if (message) {
+                    // Send the message over the chat channel
+                    chatChannel.postMessage(message);
+                    messageInput.value = ''; // Clear the input field
+                }
+            });
+
+            // Event listener for incoming messages from the chat channel
+            chatChannel.addEventListener('message', function (event) {
+                // Display the received message
+                displayMessage(event.data);
+            });
+        });
+    </script>
+</body>
+</html>

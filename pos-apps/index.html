@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Basic POS</title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <h4>Kategori</h4>
+            <div class="row mb-4 mt-2 section-categories"></div>
+
+            <h4 class="text-label-category">Semua</h4>
+            <div class="row section-products"></div>
+        </div>
+
+        <div class="col-12 col-md-4 col-lg-4">
+            <div class="card border-0 section-histories">
+                <div class="card-header text-white" style="background-color: #2C6380;">
+                    <h5>Histori Order</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-stripped table-history">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <h6 class="text-center subtotal-price">TOTAL Rp 0</h6>
+
+                    <button class="btn btn-danger w-100 my-2">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalBuy" tabindex="-1" aria-labelledby="modalBuyLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalBuyLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="">Quantity</label>
+                    <input type="number" name="" id="input-qty" class="form-control">
+                    <input type="hidden" name="" id="input-code">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addItem()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/fontawesome.js"></script>
+    <script src="assets/js/scripts.js"></script>
+
+    <script>
+        var categories = [
+            {
+                name : 'Semua',
+                icon : 'fa fa-boxes',
+                flagActive : true,
+            },
+            {
+                name : 'Alat Rumah Tangga',
+                icon : 'fa fa-broom',
+                flagActive : false,
+            },
+            {
+                name : 'Teknologi',
+                icon : 'fa fa-laptop',
+                flagActive : false,
+            },
+            {
+                name : 'Fashion',
+                icon : 'fa fa-ring',
+                flagActive : false,
+            },
+            {
+                name : 'Bangunan',
+                icon : 'fa fa-building',
+                flagActive : false,
+            },
+            {
+                name : 'Lain-lain',
+                icon : 'fa fa-cube',
+                flagActive : false,
+            },
+        ]
+
+        var products = [
+            {
+                code: 1, 
+                name : 'Kipas Sate', 
+                category : 'Teknologi',
+                image : 'https://images.tokopedia.net/img/cache/700/hDjmkQ/2021/10/19/e12266bb-1bdd-4c4d-a515-c68a87071977.jpg',
+                price: 100000, 
+                stock : 100
+            },
+            {
+                code: 2, 
+                name : 'Sepatu', 
+                category : 'Fashion',
+                image : 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//107/MTA-47597525/brd-44261_sepatu-sneakers-olahraga-pria-model-tali_full01.jpg',
+                price: 500000, 
+                stock : 130
+            },
+            {
+                code: 3, 
+                name : 'Boneka', 
+                category : 'Lain-lain',
+                image : 'https://down-id.img.susercontent.com/file/id-11134207-7r98x-lmx1gj67ub9od4',
+                price: 130000, 
+                stock : 210
+            },
+            {
+                code: 4, 
+                name : 'Gelas Keren', 
+                category : 'Lain-lain',
+                image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqlGzOvoz6QMEqGOh63s3U2FspxU4jVBAsWQ&usqp=CAU',
+                price: 40000, 
+                stock : 710
+            },
+            {
+                code: 5, 
+                name : 'Sapu Lantai', 
+                category : 'Alat Rumah Tangga',
+                image : 'https://p-id.ipricegroup.com/5feababe0ee4538334626cebda6ce52fc835823e_0.jpg',
+                price: 10000, 
+                stock : 80
+            },
+            {
+                code: 6, 
+                name : 'Topi Bagus', 
+                category : 'Sapu',
+                image : 'https://upload.jaknot.com/2023/02/images/products/50d7bf/original/flb-topi-baseball-motif-polkadot-sporty-hat-mz237.jpg',
+                price: 21000, 
+                stock : 100
+            },
+            {
+                code: 7, 
+                name : 'Jeans Wanita', 
+                category : 'Fashion',
+                image : 'https://img.lazcdn.com/g/p/9ec42e1e6bce89fbdbdf5bf48583cc89.jpg_720x720q80.jpg',
+                price: 209000, 
+                stock : 300
+            },
+            {
+                code: 8, 
+                name : 'Kacamata Korea', 
+                category : 'Fashion',
+                image : 'https://img.lazcdn.com/g/p/9e24b2ae1dab85456c9e121c2c6cec54.jpg_720x720q80.jpgg',
+                price: 182000, 
+                stock : 90
+            },
+        ]
+
+        var productHistories = []
+
+        viewProducts()
+        viewCategories()
+
+    </script>
+</body>
+
+</html>

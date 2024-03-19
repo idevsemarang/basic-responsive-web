@@ -1,0 +1,36 @@
+body{
+    padding: 10px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.single-product{
+    /* border: 1px solid #e9ecef; */
+}
+
+.single-product:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.single-product img{
+    width: 100%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.product-label{
+    padding: 6px;
+    background: #ffffff;
+}
+.category-single{
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 10px 4px;
+    font-size: 15px;
+    text-align: center;
+}
+.category-single.active{
+    background-color: #2C6380;
+    color: #ffffff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) 
+}

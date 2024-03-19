@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Task Management</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0px;
+            padding: 0px;
+            background-color: #dddada;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ongoing-section" class="droppable">
+        <h3>Ongoing</h3>
+        <div class="task draggable og-bg" data-status="ongoing">Task 1</div>
+        <div class="task draggable og-bg" data-status="ongoing">Task 2</div>
+        <div class="task draggable og-bg" data-status="ongoing">Task 3</div>
+    </div>
+
+    <div id="done-section" class="droppable">
+        <h3>Done</h3>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    
+    <script>
+        $(function (){
+            $(".draggable").draggable({
+                revert : true
+            })
+
+            $(".droppable").droppable({
+                accept: ".draggable",
+                drop : function(event, ui){
+                    var droppedItem = ui.draggable
+                    var status = droppedItem.data("status")
+
+                    if (status === "ongoing") {
+                        droppedItem.detach().appendTo($(this))
+                        droppedItem.data("status", "done")
+                        droppedItem.addClass("done-bg")
+                        droppedItem.removeClass("og-bg")
+                    }else{
+                        droppedItem.detach().appendTo($(this))
+                        droppedItem.data("status", "ongoing")
+                        droppedItem.addClass("og-bg")
+                        droppedItem.removeClass("done-bg")
+                    }
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
